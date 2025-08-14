@@ -1,0 +1,1684 @@
+{
+	"info": {
+		"_postman_id": "a64ee093-7408-4057-b15f-1471be840f12",
+		"name": "APS Repay Payment Gateway - Payment API Testing",
+		"description": "Comprehensive test collection for Repay payment gateway API covering various transaction types and scenarios",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4668444"
+	},
+	"item": [
+		{
+			"name": "Credit Card Transactions",
+			"item": [
+				{
+					"name": "1. Simple Credit Card Sale - Visa",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the URL-encoded response",
+									"const responseText = pm.response.text();",
+									"const params = new URLSearchParams(responseText);",
+									"",
+									"// Check if transaction was approved",
+									"pm.test(\"Transaction approved\", function () {",
+									"    pm.expect(params.get('response')).to.equal('1');",
+									"});",
+									"",
+									"// Store transaction ID for later use",
+									"if (params.get('transactionid')) {",
+									"    pm.collectionVariables.set('transaction_id', params.get('transactionid'));",
+									"}",
+									"",
+									"// Log response details",
+									"console.log('Response:', params.get('responsetext'));",
+									"console.log('Transaction ID:', params.get('transactionid'));",
+									"console.log('Auth Code:', params.get('authcode'));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "sale",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "10.00",
+									"type": "text"
+								},
+								{
+									"key": "ccnumber",
+									"value": "4111111111111111",
+									"type": "text"
+								},
+								{
+									"key": "ccexp",
+									"value": "1225",
+									"type": "text"
+								},
+								{
+									"key": "cvv",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "John",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Doe",
+									"type": "text"
+								},
+								{
+									"key": "address1",
+									"value": "123 Main Street",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "New York",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "NY",
+									"type": "text"
+								},
+								{
+									"key": "zip",
+									"value": "10001",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "US",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "john.doe@example.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "555-123-4567",
+									"type": "text"
+								},
+								{
+									"key": "orderid",
+									"value": "TEST-{{$timestamp}}",
+									"type": "text"
+								},
+								{
+									"key": "orderdescription",
+									"value": "Test Visa transaction",
+									"type": "text"
+								},
+								{
+									"key": "ipaddress",
+									"value": "192.168.1.1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. MasterCard Sale with Tax and Shipping",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "sale",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "125.50",
+									"type": "text"
+								},
+								{
+									"key": "ccnumber",
+									"value": "5555555555554444",
+									"type": "text"
+								},
+								{
+									"key": "ccexp",
+									"value": "0326",
+									"type": "text"
+								},
+								{
+									"key": "cvv",
+									"value": "456",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "Jane",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Smith",
+									"type": "text"
+								},
+								{
+									"key": "address1",
+									"value": "456 Oak Avenue",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Los Angeles",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "CA",
+									"type": "text"
+								},
+								{
+									"key": "zip",
+									"value": "90001",
+									"type": "text"
+								},
+								{
+									"key": "tax",
+									"value": "10.50",
+									"type": "text"
+								},
+								{
+									"key": "shipping",
+									"value": "15.00",
+									"type": "text"
+								},
+								{
+									"key": "orderid",
+									"value": "MC-{{$timestamp}}",
+									"type": "text"
+								},
+								{
+									"key": "orderdescription",
+									"value": "MasterCard test with tax and shipping",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. American Express Sale",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "sale",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "250.00",
+									"type": "text"
+								},
+								{
+									"key": "ccnumber",
+									"value": "378282246310005",
+									"type": "text"
+								},
+								{
+									"key": "ccexp",
+									"value": "0827",
+									"type": "text"
+								},
+								{
+									"key": "cvv",
+									"value": "1234",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "Robert",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Johnson",
+									"type": "text"
+								},
+								{
+									"key": "address1",
+									"value": "789 Park Place",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Chicago",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "IL",
+									"type": "text"
+								},
+								{
+									"key": "zip",
+									"value": "60601",
+									"type": "text"
+								},
+								{
+									"key": "orderid",
+									"value": "AMEX-{{$timestamp}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. Discover Sale",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "sale",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "75.25",
+									"type": "text"
+								},
+								{
+									"key": "ccnumber",
+									"value": "6011111111111117",
+									"type": "text"
+								},
+								{
+									"key": "ccexp",
+									"value": "1228",
+									"type": "text"
+								},
+								{
+									"key": "cvv",
+									"value": "789",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "Emily",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Davis",
+									"type": "text"
+								},
+								{
+									"key": "address1",
+									"value": "321 Elm Street",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Houston",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "TX",
+									"type": "text"
+								},
+								{
+									"key": "zip",
+									"value": "77001",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authorization and Capture",
+			"item": [
+				{
+					"name": "5. Authorization Only",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseText = pm.response.text();",
+									"const params = new URLSearchParams(responseText);",
+									"",
+									"pm.test(\"Authorization approved\", function () {",
+									"    pm.expect(params.get('response')).to.equal('1');",
+									"});",
+									"",
+									"// Store auth transaction ID for capture",
+									"if (params.get('transactionid')) {",
+									"    pm.collectionVariables.set('auth_transaction_id', params.get('transactionid'));",
+									"    console.log('Auth Transaction ID stored:', params.get('transactionid'));",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "auth",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "50.00",
+									"type": "text"
+								},
+								{
+									"key": "ccnumber",
+									"value": "4111111111111111",
+									"type": "text"
+								},
+								{
+									"key": "ccexp",
+									"value": "1225",
+									"type": "text"
+								},
+								{
+									"key": "cvv",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "Michael",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Brown",
+									"type": "text"
+								},
+								{
+									"key": "address1",
+									"value": "555 Pine Street",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Seattle",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "WA",
+									"type": "text"
+								},
+								{
+									"key": "zip",
+									"value": "98101",
+									"type": "text"
+								},
+								{
+									"key": "orderid",
+									"value": "AUTH-{{$timestamp}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6. Capture Previous Authorization",
+					"event": [
+						{
+							"listen": "pre-request",
+							"script": {
+								"exec": [
+									"// Check if we have an auth transaction ID",
+									"const authId = pm.collectionVariables.get('auth_transaction_id');",
+									"if (!authId) {",
+									"    console.warn('No auth_transaction_id found. Run Authorization Only first.');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "capture",
+									"type": "text"
+								},
+								{
+									"key": "transactionid",
+									"value": "{{auth_transaction_id}}",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "50.00",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "7. Partial Capture",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "capture",
+									"type": "text"
+								},
+								{
+									"key": "transactionid",
+									"value": "{{auth_transaction_id}}",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "25.00",
+									"description": "Partial capture of original $50 auth",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Refunds and Voids",
+			"item": [
+				{
+					"name": "8. Full Refund",
+					"event": [
+						{
+							"listen": "pre-request",
+							"script": {
+								"exec": [
+									"// Check if we have a transaction ID to refund",
+									"const txnId = pm.collectionVariables.get('transaction_id');",
+									"if (!txnId) {",
+									"    console.warn('No transaction_id found. Run a Sale transaction first.');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "refund",
+									"type": "text"
+								},
+								{
+									"key": "transactionid",
+									"value": "{{transaction_id}}",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "10.00",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "9. Partial Refund",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "refund",
+									"type": "text"
+								},
+								{
+									"key": "transactionid",
+									"value": "{{transaction_id}}",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "5.00",
+									"description": "Partial refund",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "10. Void Transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "void",
+									"type": "text"
+								},
+								{
+									"key": "transactionid",
+									"value": "{{transaction_id}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ACH/eCheck Transactions",
+			"item": [
+				{
+					"name": "11. ACH Sale - Checking Account",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "sale",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "100.00",
+									"type": "text"
+								},
+								{
+									"key": "checkname",
+									"value": "John Doe",
+									"type": "text"
+								},
+								{
+									"key": "checkaba",
+									"value": "123456789",
+									"type": "text"
+								},
+								{
+									"key": "checkaccount",
+									"value": "12345678901234",
+									"type": "text"
+								},
+								{
+									"key": "account_holder_type",
+									"value": "personal",
+									"type": "text"
+								},
+								{
+									"key": "account_type",
+									"value": "checking",
+									"type": "text"
+								},
+								{
+									"key": "orderid",
+									"value": "ACH-{{$timestamp}}",
+									"type": "text"
+								},
+								{
+									"key": "orderdescription",
+									"value": "ACH payment test",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "12. ACH Sale - Savings Account",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "sale",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "250.00",
+									"type": "text"
+								},
+								{
+									"key": "checkname",
+									"value": "Business ABC Inc",
+									"type": "text"
+								},
+								{
+									"key": "checkaba",
+									"value": "123456789",
+									"type": "text"
+								},
+								{
+									"key": "checkaccount",
+									"value": "98765432109876",
+									"type": "text"
+								},
+								{
+									"key": "account_holder_type",
+									"value": "business",
+									"type": "text"
+								},
+								{
+									"key": "account_type",
+									"value": "savings",
+									"type": "text"
+								},
+								{
+									"key": "orderid",
+									"value": "ACH-BIZ-{{$timestamp}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Special Transactions",
+			"item": [
+				{
+					"name": "13. Card Validation (Zero Auth)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "validate",
+									"type": "text"
+								},
+								{
+									"key": "ccnumber",
+									"value": "4111111111111111",
+									"type": "text"
+								},
+								{
+									"key": "ccexp",
+									"value": "1225",
+									"type": "text"
+								},
+								{
+									"key": "cvv",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "Test",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Validation",
+									"type": "text"
+								},
+								{
+									"key": "address1",
+									"value": "123 Test St",
+									"type": "text"
+								},
+								{
+									"key": "zip",
+									"value": "12345",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "14. Standalone Credit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "credit",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "50.00",
+									"type": "text"
+								},
+								{
+									"key": "ccnumber",
+									"value": "4111111111111111",
+									"type": "text"
+								},
+								{
+									"key": "ccexp",
+									"value": "1225",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "Credit",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Recipient",
+									"type": "text"
+								},
+								{
+									"key": "orderid",
+									"value": "CREDIT-{{$timestamp}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Error Test Cases",
+			"item": [
+				{
+					"name": "15. Declined Transaction (Low Amount)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseText = pm.response.text();",
+									"const params = new URLSearchParams(responseText);",
+									"",
+									"pm.test(\"Transaction declined as expected\", function () {",
+									"    pm.expect(params.get('response')).to.equal('2');",
+									"});",
+									"",
+									"console.log('Decline reason:', params.get('responsetext'));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "sale",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "0.50",
+									"description": "Amount < $1 should trigger decline",
+									"type": "text"
+								},
+								{
+									"key": "ccnumber",
+									"value": "4111111111111111",
+									"type": "text"
+								},
+								{
+									"key": "ccexp",
+									"value": "1225",
+									"type": "text"
+								},
+								{
+									"key": "cvv",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "Decline",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Test",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "16. Invalid Card Number",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseText = pm.response.text();",
+									"const params = new URLSearchParams(responseText);",
+									"",
+									"pm.test(\"Transaction failed due to invalid card\", function () {",
+									"    pm.expect(params.get('response')).to.be.oneOf(['2', '3']);",
+									"});",
+									"",
+									"console.log('Error:', params.get('responsetext'));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "sale",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "10.00",
+									"type": "text"
+								},
+								{
+									"key": "ccnumber",
+									"value": "1234567890123456",
+									"description": "Invalid card number",
+									"type": "text"
+								},
+								{
+									"key": "ccexp",
+									"value": "1225",
+									"type": "text"
+								},
+								{
+									"key": "cvv",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "Invalid",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Card",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "17. Expired Card",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "sale",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "25.00",
+									"type": "text"
+								},
+								{
+									"key": "ccnumber",
+									"value": "4111111111111111",
+									"type": "text"
+								},
+								{
+									"key": "ccexp",
+									"value": "0120",
+									"description": "Expired date (Jan 2020)",
+									"type": "text"
+								},
+								{
+									"key": "cvv",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "Expired",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Card",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "18. Missing Required Field",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseText = pm.response.text();",
+									"const params = new URLSearchParams(responseText);",
+									"",
+									"pm.test(\"Error due to missing required field\", function () {",
+									"    pm.expect(params.get('response')).to.equal('3');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "sale",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "10.00",
+									"type": "text"
+								},
+								{
+									"key": "ccnumber",
+									"value": "4111111111111111",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "Missing",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "ExpDate",
+									"description": "Missing ccexp field",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "19. Invalid Security Key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Authentication error expected\", function () {",
+									"    const responseText = pm.response.text();",
+									"    pm.expect(responseText).to.include('error');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "INVALID_KEY_12345",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "sale",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "10.00",
+									"type": "text"
+								},
+								{
+									"key": "ccnumber",
+									"value": "4111111111111111",
+									"type": "text"
+								},
+								{
+									"key": "ccexp",
+									"value": "1225",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AVS and CVV Testing",
+			"item": [
+				{
+					"name": "20. AVS Match Test",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "sale",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "15.00",
+									"type": "text"
+								},
+								{
+									"key": "ccnumber",
+									"value": "4111111111111111",
+									"type": "text"
+								},
+								{
+									"key": "ccexp",
+									"value": "1225",
+									"type": "text"
+								},
+								{
+									"key": "cvv",
+									"value": "999",
+									"description": "CVV 999 for match",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "AVS",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Test",
+									"type": "text"
+								},
+								{
+									"key": "address1",
+									"value": "888",
+									"description": "Address 888 for AVS match",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Test City",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "CA",
+									"type": "text"
+								},
+								{
+									"key": "zip",
+									"value": "77777",
+									"description": "ZIP 77777 for AVS match",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "21. AVS Mismatch Test",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "security_key",
+									"value": "{{security_key}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "sale",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "20.00",
+									"type": "text"
+								},
+								{
+									"key": "ccnumber",
+									"value": "4111111111111111",
+									"type": "text"
+								},
+								{
+									"key": "ccexp",
+									"value": "1225",
+									"type": "text"
+								},
+								{
+									"key": "cvv",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "AVS",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Mismatch",
+									"type": "text"
+								},
+								{
+									"key": "address1",
+									"value": "999 Wrong Street",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Wrong City",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "XX",
+									"type": "text"
+								},
+								{
+									"key": "zip",
+									"value": "99999",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://gateway.repay.com/api/transact.php",
+			"type": "string"
+		},
+		{
+			"key": "security_key",
+			"value": "TEST_API_KEY_HERE",
+			"type": "string"
+		},
+		{
+			"key": "transaction_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "auth_transaction_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "GET_TEST_API_KEY_HERE",
+			"value": "https://gateway.repay.com/merchants/resources/integration/integration_portal.php?#testing_information",
+			"type": "string"
+		}
+	]
+}
